@@ -55,7 +55,7 @@ public class RegisterView extends VerticalLayout {
                 register.getUI().ifPresent(ui -> ui.navigate(""));
             }
         } else {
-            Notification.show("Password confirmation incorrected");
+            Notification.show("Password confirmation incorrect");
         }
     }
 

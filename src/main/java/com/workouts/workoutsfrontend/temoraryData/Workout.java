@@ -9,10 +9,11 @@ import java.time.LocalDate;
 import java.util.List;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 public class Workout {
     private String workoutName;
     private List<ExerciseWithParameters> exercisesWithSeriesRepetitionsBreaks;
-    private LocalDate localDate;
+    private LocalDate trainingDate;
 }
