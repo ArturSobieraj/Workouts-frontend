@@ -28,12 +28,11 @@ public class DashboardMainView extends VerticalLayout {
         VerticalLayout buttonsLayout = new VerticalLayout();
         HorizontalLayout gridsLayout = new HorizontalLayout();
 
-        Button workoutsList = new Button("New workout");
         Button favourites = new Button("Favourite exercises");
-        Button trainingList = new Button("List of exercises");
-        buttonsLayout.add(workoutsList);
+        Button listOfExercises = new Button("List of exercises");
+        listOfExercises.addClickListener(event -> listOfExercisesAction(listOfExercises));
         buttonsLayout.add(favourites);
-        buttonsLayout.add(trainingList);
+        buttonsLayout.add(listOfExercises);
 
         Label calendarLabel = new Label("Next training date: " + getDateOfNextTraining(workoutService.getWorkoutList()));
         horizontalLayout.add(buttonsLayout, calendarLabel);
@@ -71,5 +70,9 @@ public class DashboardMainView extends VerticalLayout {
                .sorted()
                .collect(Collectors.toList());
         return dateList.get(0);
+    }
+
+    public void listOfExercisesAction(Button listOfExercisesButton) {
+        listOfExercisesButton.getUI().ifPresent(ui -> ui.navigate("exercisesList"));
     }
 }

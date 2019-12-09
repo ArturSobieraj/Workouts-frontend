@@ -1,9 +1,5 @@
 package com.workouts.workoutsfrontend.temoraryData;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,12 +19,14 @@ public class ExerciseService {
         return exerciseService;
     }
 
-    private void deleteExercise(Exercise exercise) {
-        exerciseList.remove(exercise);
-    }
-
-    private void addExercise(Exercise exercise) {
-        exerciseList.add(exercise);
+    public Exercise getExerciseByName(String name) {
+        Exercise exerciseFound = new Exercise();
+        for (Exercise candidate : exerciseList) {
+            if (candidate.getExerciseName().equals(name)) {
+                exerciseFound = candidate;
+            }
+        }
+        return exerciseFound;
     }
 
     public List<Exercise> getExerciseList() {
