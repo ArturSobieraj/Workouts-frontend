@@ -1,4 +1,6 @@
-package com.workouts.workoutsfrontend.temoraryData;
+package com.workouts.workoutsfrontend.dataServices;
+
+import com.workouts.workoutsfrontend.dataServices.Dto.Exercise;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,10 +8,12 @@ import java.util.List;
 public class ExerciseService {
 
     private List<Exercise> exerciseList;
+    private List<Exercise> favouriteExercisesList;
     private static ExerciseService exerciseService;
 
     private ExerciseService() {
         this.exerciseList = exampleExercises();
+        this.favouriteExercisesList = new ArrayList<>();
     }
 
     public static ExerciseService getInstance() {
@@ -27,6 +31,18 @@ public class ExerciseService {
             }
         }
         return exerciseFound;
+    }
+
+    public List<Exercise> getFavouriteExercisesList() {
+        return new ArrayList<>(favouriteExercisesList);
+    }
+
+    public void addNewFavouriteExercise(Exercise exercise) {
+        favouriteExercisesList.add(exercise);
+    }
+
+    public void deleteFromFavourites(Exercise exercise) {
+        favouriteExercisesList.remove(exercise);
     }
 
     public List<Exercise> getExerciseList() {

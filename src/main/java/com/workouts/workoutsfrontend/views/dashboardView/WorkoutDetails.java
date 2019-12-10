@@ -1,11 +1,11 @@
-package com.workouts.workoutsfrontend.dashboardView;
+package com.workouts.workoutsfrontend.views.dashboardView;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.workouts.workoutsfrontend.temoraryData.ExerciseWithParameters;
-import com.workouts.workoutsfrontend.temoraryData.Workout;
+import com.workouts.workoutsfrontend.dataServices.Dto.ExerciseWithParameters;
+import com.workouts.workoutsfrontend.dataServices.Dto.Workout;
 
 import java.util.List;
 

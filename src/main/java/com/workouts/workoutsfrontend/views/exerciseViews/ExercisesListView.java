@@ -1,12 +1,12 @@
-package com.workouts.workoutsfrontend.exerciseViews;
+package com.workouts.workoutsfrontend.views.exerciseViews;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
-import com.workouts.workoutsfrontend.temoraryData.Exercise;
-import com.workouts.workoutsfrontend.temoraryData.ExerciseService;
+import com.workouts.workoutsfrontend.dataServices.Dto.Exercise;
+import com.workouts.workoutsfrontend.dataServices.ExerciseService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -43,9 +43,8 @@ public class ExercisesListView extends VerticalLayout {
         setSizeFull();
         setAlignItems(Alignment.CENTER);
 
-        exerciseGrid.asSingleSelect().addValueChangeListener(event -> {
-            getUI().ifPresent(ui -> ui.navigate(SingleExerciseView.class, exerciseGrid.asSingleSelect().getValue().getExerciseName()));
-        });
+        exerciseGrid.asSingleSelect().addValueChangeListener(event -> getUI().ifPresent(ui -> ui.navigate(SingleExerciseView.class,
+                exerciseGrid.asSingleSelect().getValue().getExerciseName())));
 
     }
 

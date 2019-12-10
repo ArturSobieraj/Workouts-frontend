@@ -1,5 +1,7 @@
-package com.workouts.workoutsfrontend.temoraryData;
+package com.workouts.workoutsfrontend.dataServices;
 
+
+import com.workouts.workoutsfrontend.dataServices.Dto.Workout;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;

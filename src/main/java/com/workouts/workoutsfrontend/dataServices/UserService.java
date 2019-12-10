@@ -1,4 +1,6 @@
-package com.workouts.workoutsfrontend.temoraryData;
+package com.workouts.workoutsfrontend.dataServices;
+
+import com.workouts.workoutsfrontend.dataServices.Dto.User;
 
 import java.util.ArrayList;
 import java.util.List;

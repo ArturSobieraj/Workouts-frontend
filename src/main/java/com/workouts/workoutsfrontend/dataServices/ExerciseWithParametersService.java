@@ -1,4 +1,6 @@
-package com.workouts.workoutsfrontend.temoraryData;
+package com.workouts.workoutsfrontend.dataServices;
+
+import com.workouts.workoutsfrontend.dataServices.Dto.ExerciseWithParameters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,11 +8,13 @@ import java.util.List;
 public class ExerciseWithParametersService {
 
     private List<ExerciseWithParameters> exerciseWithParametersList;
+    private List<ExerciseWithParameters> exercisesForNewWorkout;
     private static ExerciseWithParametersService exerciseWithParametersService;
     private ExerciseService exerciseService = ExerciseService.getInstance();
 
     private ExerciseWithParametersService() {
         this.exerciseWithParametersList = exampleData();
+        this.exercisesForNewWorkout = new ArrayList<>();
     }
 
     public static ExerciseWithParametersService getInstance() {

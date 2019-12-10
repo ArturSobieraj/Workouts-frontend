@@ -1,4 +1,4 @@
-package com.workouts.workoutsfrontend.loginView;
+package com.workouts.workoutsfrontend.views.loginView;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
@@ -10,10 +10,8 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.PropertyId;
 import com.vaadin.flow.router.Route;
-import com.workouts.workoutsfrontend.temoraryData.User;
-import com.workouts.workoutsfrontend.temoraryData.UserService;
-
-import java.util.stream.Collectors;
+import com.workouts.workoutsfrontend.dataServices.Dto.User;
+import com.workouts.workoutsfrontend.dataServices.UserService;
 
 @Route("register")
 public class RegisterView extends VerticalLayout {

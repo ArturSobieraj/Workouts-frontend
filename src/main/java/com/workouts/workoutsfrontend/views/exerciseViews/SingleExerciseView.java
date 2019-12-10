@@ -1,4 +1,4 @@
-package com.workouts.workoutsfrontend.exerciseViews;
+package com.workouts.workoutsfrontend.views.exerciseViews;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Label;
@@ -7,8 +7,8 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.Route;
-import com.workouts.workoutsfrontend.temoraryData.Exercise;
-import com.workouts.workoutsfrontend.temoraryData.ExerciseService;
+import com.workouts.workoutsfrontend.dataServices.Dto.Exercise;
+import com.workouts.workoutsfrontend.dataServices.ExerciseService;
 
 @Route
 public class SingleExerciseView extends VerticalLayout implements HasUrlParameter<String> {

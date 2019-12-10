@@ -1,4 +1,4 @@
-package com.workouts.workoutsfrontend.dashboardView;
+package com.workouts.workoutsfrontend.views.dashboardView;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -7,7 +7,9 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import com.vaadin.flow.router.Route;
-import com.workouts.workoutsfrontend.temoraryData.*;
+import com.workouts.workoutsfrontend.dataServices.*;
+import com.workouts.workoutsfrontend.dataServices.Dto.Workout;
+import com.workouts.workoutsfrontend.views.exerciseViews.FavouriteExercises;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -29,6 +31,7 @@ public class DashboardMainView extends VerticalLayout {
         HorizontalLayout gridsLayout = new HorizontalLayout();
 
         Button favourites = new Button("Favourite exercises");
+        favourites.addClickListener(event -> goToFavouriteExercises());
         Button listOfExercises = new Button("List of exercises");
         listOfExercises.addClickListener(event -> listOfExercisesAction(listOfExercises));
         buttonsLayout.add(favourites);
@@ -64,7 +67,7 @@ public class DashboardMainView extends VerticalLayout {
         workoutGrid.setItems(workoutService.getWorkoutList());
     }
 
-    public LocalDate getDateOfNextTraining(List<Workout> workoutList) {
+    private LocalDate getDateOfNextTraining(List<Workout> workoutList) {
        List<LocalDate> dateList = workoutList.stream()
                .map(Workout::getTrainingDate)
                .sorted()
@@ -72,7 +75,11 @@ public class DashboardMainView extends VerticalLayout {
         return dateList.get(0);
     }
 
-    public void listOfExercisesAction(Button listOfExercisesButton) {
+    private void listOfExercisesAction(Button listOfExercisesButton) {
         listOfExercisesButton.getUI().ifPresent(ui -> ui.navigate("exercisesList"));
+    }
+
+    private void goToFavouriteExercises() {
+        getUI().ifPresent(ui -> ui.navigate(FavouriteExercises.class, "zeroParameter"));
     }
 }

@@ -1,4 +1,4 @@
-package com.workouts.workoutsfrontend.temoraryData;
+package com.workouts.workoutsfrontend.dataServices.Dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
