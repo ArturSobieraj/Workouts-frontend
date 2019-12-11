@@ -29,6 +29,14 @@ public class WorkoutService {
         return new ArrayList<>(workoutList);
     }
 
+    public void addWorkout(Workout workout) {
+        workoutList.add(workout);
+    }
+
+    public void deleteWorkout(Workout workout) {
+        workoutList.remove(workout);
+    }
+
     private List<Workout> exampleData() {
         workoutList = new ArrayList<>();
         workoutList.add(new Workout("Example Workout", exerciseWithParametersService.getExerciseWithParametersList(), LocalDate.now().plus(2, ChronoUnit.DAYS)));

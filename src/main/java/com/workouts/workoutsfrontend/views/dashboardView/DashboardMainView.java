@@ -3,12 +3,14 @@ package com.workouts.workoutsfrontend.views.dashboardView;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import com.vaadin.flow.router.Route;
 import com.workouts.workoutsfrontend.dataServices.*;
 import com.workouts.workoutsfrontend.dataServices.Dto.Workout;
+import com.workouts.workoutsfrontend.views.WorkoutView.NewWorkoutView;
 import com.workouts.workoutsfrontend.views.exerciseViews.FavouriteExercises;
 
 import java.time.LocalDate;
@@ -34,8 +36,12 @@ public class DashboardMainView extends VerticalLayout {
         favourites.addClickListener(event -> goToFavouriteExercises());
         Button listOfExercises = new Button("List of exercises");
         listOfExercises.addClickListener(event -> listOfExercisesAction(listOfExercises));
-        buttonsLayout.add(favourites);
-        buttonsLayout.add(listOfExercises);
+        Button edit = new Button("Edit workout");
+        edit.addClickListener(event -> editWorkout());
+        Button deleteWorkout = new Button("Delete Workout");
+        deleteWorkout.addClickListener(event -> deleteWorkout());
+        buttonsLayout.add(favourites, listOfExercises, edit, deleteWorkout);
+
 
         Label calendarLabel = new Label("Next training date: " + getDateOfNextTraining(workoutService.getWorkoutList()));
         horizontalLayout.add(buttonsLayout, calendarLabel);
@@ -81,5 +87,22 @@ public class DashboardMainView extends VerticalLayout {
 
     private void goToFavouriteExercises() {
         getUI().ifPresent(ui -> ui.navigate(FavouriteExercises.class, "zeroParameter"));
+    }
+
+    private void editWorkout() {
+        if (workoutGrid.asSingleSelect().getValue() != null) {
+            getUI().ifPresent(ui -> ui.navigate(NewWorkoutView.class, workoutGrid.asSingleSelect().getValue().getWorkoutName()));
+        } else {
+            Notification.show("Nothing selected", 3000, Notification.Position.MIDDLE);
+        }
+    }
+
+    private void deleteWorkout() {
+        if (workoutGrid.asSingleSelect().getValue() != null) {
+            workoutService.deleteWorkout(workoutGrid.asSingleSelect().getValue());
+            refresh();
+        } else {
+            Notification.show("Nothing selected", 3000, Notification.Position.MIDDLE);
+        }
     }
 }

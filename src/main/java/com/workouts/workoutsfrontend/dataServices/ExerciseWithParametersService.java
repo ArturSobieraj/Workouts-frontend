@@ -24,8 +24,28 @@ public class ExerciseWithParametersService {
         return exerciseWithParametersService;
     }
 
+    public void addNewExercise(ExerciseWithParameters exerciseWithParameters) {
+        this.exercisesForNewWorkout.add(exerciseWithParameters);
+    }
+
+    public void deleteAddedExercise(ExerciseWithParameters exerciseWithParameters) {
+        this.exercisesForNewWorkout.remove(exerciseWithParameters);
+    }
+
+    public List<ExerciseWithParameters> getExercisesForNewWorkout() {
+        return new ArrayList<>(exercisesForNewWorkout);
+    }
+
     public List<ExerciseWithParameters> getExerciseWithParametersList() {
         return new ArrayList<>(exerciseWithParametersList);
+    }
+
+    public void setClearList() {
+        this.exercisesForNewWorkout = new ArrayList<>();
+    }
+
+    public void setExercisesForNewWorkout(List<ExerciseWithParameters> list) {
+        this.exercisesForNewWorkout = list;
     }
 
     private List<ExerciseWithParameters> exampleData() {

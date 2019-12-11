@@ -9,6 +9,7 @@ import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.Route;
 import com.workouts.workoutsfrontend.dataServices.Dto.Exercise;
 import com.workouts.workoutsfrontend.dataServices.ExerciseService;
+import com.workouts.workoutsfrontend.views.WorkoutView.NewWorkoutView;
 
 @Route
 public class SingleExerciseView extends VerticalLayout implements HasUrlParameter<String> {
@@ -27,7 +28,9 @@ public class SingleExerciseView extends VerticalLayout implements HasUrlParamete
         Button back = new Button("Back");
         back.addClickListener(event -> backAction(back));
         Button addToFavourites = new Button("Add to Favourites");
+        addToFavourites.addClickListener(event -> addToFavourites());
         Button addToWorkout = new Button("Add to Workout");
+        addToWorkout.addClickListener(event -> addToWorkout());
         buttonsLayout.add(back, addToFavourites, addToWorkout);
 
         add(name, description, category, muscles, secondaryMuscles, equipment, buttonsLayout);
@@ -47,5 +50,13 @@ public class SingleExerciseView extends VerticalLayout implements HasUrlParamete
 
     private void backAction(Button back) {
         back.getUI().ifPresent(ui -> ui.navigate("exercisesList"));
+    }
+
+    private void addToFavourites() {
+        getUI().ifPresent(ui -> ui.navigate(FavouriteExercises.class, name.getText()));
+    }
+
+    private void addToWorkout() {
+        getUI().ifPresent(ui -> ui.navigate(NewWorkoutView.class, name.getText()));
     }
 }
