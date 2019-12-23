@@ -1,5 +1,7 @@
-package com.workouts.workoutsfrontend.dataServices.Dto;
+package com.workouts.workoutsfrontend.Dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +14,18 @@ import java.util.List;
 @NoArgsConstructor
 @Getter
 @Setter
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Workout {
+
+    @JsonProperty("id")
+    private Long id;
+
+    @JsonProperty("workoutName")
     private String workoutName;
+
+    @JsonProperty("exercisesWithSeriesRepetitionsBreaks")
     private List<ExerciseWithParameters> exercisesWithSeriesRepetitionsBreaks;
+
+    @JsonProperty("trainingDate")
     private LocalDate trainingDate;
 }

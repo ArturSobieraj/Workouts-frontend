@@ -9,14 +9,20 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.Route;
-import com.workouts.workoutsfrontend.dataServices.Dto.Exercise;
+import com.workouts.workoutsfrontend.Dto.FavouriteExercise;
 import com.workouts.workoutsfrontend.dataServices.ExerciseService;
+import com.workouts.workoutsfrontend.dataServices.WorkoutService;
+import com.workouts.workoutsfrontend.facades.UsersFacade;
+import com.workouts.workoutsfrontend.views.dashboardView.DashboardMainView;
+
 
 @Route("favourites")
 public class FavouriteExercises extends VerticalLayout implements HasUrlParameter<String> {
 
-    private Grid<Exercise> favouriteExercisesGrid = new Grid<>();
+    private Grid<FavouriteExercise> favouriteExercisesGrid = new Grid<>();
+    private UsersFacade usersFacade = new UsersFacade();
     private ExerciseService exerciseService = ExerciseService.getInstance();
+    private WorkoutService workoutService = WorkoutService.getInstance();
     private final String noSelectedNotification = "No exercise selected";
 
     public FavouriteExercises() {
@@ -27,8 +33,8 @@ public class FavouriteExercises extends VerticalLayout implements HasUrlParamete
         back.addClickListener(event -> backAction(back));
         showDescription.addClickListener(event -> showDescription());
         delete.addClickListener(event -> deleteFromFavourites());
-        favouriteExercisesGrid.addColumn(Exercise::getExerciseName).setHeader("Exercise Name");
-        favouriteExercisesGrid.addColumn(Exercise::getCategory).setHeader("Category");
+        favouriteExercisesGrid.addColumn(favouriteExercise -> favouriteExercise.getExercise().getExerciseName()).setHeader("Exercise Name");
+        favouriteExercisesGrid.addColumn(favouriteExercise -> favouriteExercise.getExercise().getCategory()).setHeader("Category");
         HorizontalLayout buttonsLayout = new HorizontalLayout();
         buttonsLayout.add(back, delete, showDescription);
         add(title, favouriteExercisesGrid, buttonsLayout);
@@ -40,34 +46,33 @@ public class FavouriteExercises extends VerticalLayout implements HasUrlParamete
     @Override
     public void setParameter(BeforeEvent event, String parameter) {
         if (!parameter.equals("zeroParameter")) {
-            Exercise addedExercise = exerciseService.getExerciseByName(parameter);
-            exerciseService.addNewFavouriteExercise(addedExercise);
+            exerciseService.addNewFavouriteExercise(workoutService.getUserMail(), exerciseService.getExerciseByName(parameter).getId());
             refresh();
         }
     }
 
     private void backAction(Button back) {
-        back.getUI().ifPresent(ui -> ui.navigate("dashboard"));
+        back.getUI().ifPresent(ui -> ui.navigate(DashboardMainView.class, "zero parameter"));
     }
 
     private void refresh() {
-        favouriteExercisesGrid.setItems(exerciseService.getFavouriteExercisesList());
+        favouriteExercisesGrid.setItems(exerciseService.getFavouriteExercisesList(workoutService.getUserMail()));
     }
 
     private void deleteFromFavourites() {
         if (favouriteExercisesGrid.asSingleSelect().getValue() != null) {
-            exerciseService.deleteFromFavourites(favouriteExercisesGrid.asSingleSelect().getValue());
+            exerciseService.deleteFromFavourites(favouriteExercisesGrid.asSingleSelect().getValue().getId());
             refresh();
         } else {
-            Notification.show(noSelectedNotification, 1000, Notification.Position.MIDDLE);
+            Notification.show(noSelectedNotification, 2000, Notification.Position.MIDDLE);
         }
     }
 
     private void showDescription() {
         if (favouriteExercisesGrid.asSingleSelect().getValue() != null) {
-            getUI().ifPresent(ui -> ui.navigate(SingleExerciseView.class, favouriteExercisesGrid.asSingleSelect().getValue().getExerciseName()));
+            getUI().ifPresent(ui -> ui.navigate(SingleExerciseView.class, favouriteExercisesGrid.asSingleSelect().getValue().getExercise().getExerciseName()));
         } else {
-            Notification.show(noSelectedNotification, 1000, Notification.Position.MIDDLE);
+            Notification.show(noSelectedNotification, 2000, Notification.Position.MIDDLE);
         }
     }
 }

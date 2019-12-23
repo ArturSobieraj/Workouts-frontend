@@ -4,8 +4,8 @@ import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.workouts.workoutsfrontend.dataServices.Dto.ExerciseWithParameters;
-import com.workouts.workoutsfrontend.dataServices.Dto.Workout;
+import com.workouts.workoutsfrontend.Dto.ExerciseWithParameters;
+import com.workouts.workoutsfrontend.Dto.Workout;
 
 import java.util.List;
 

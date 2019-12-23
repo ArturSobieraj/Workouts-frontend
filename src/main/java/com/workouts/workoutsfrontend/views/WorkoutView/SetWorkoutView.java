@@ -7,14 +7,18 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
-import com.workouts.workoutsfrontend.dataServices.Dto.Workout;
+import com.workouts.workoutsfrontend.Dto.Workout;
 import com.workouts.workoutsfrontend.dataServices.ExerciseWithParametersService;
 import com.workouts.workoutsfrontend.dataServices.WorkoutService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 
 @Route("submit")
 public class SetWorkoutView extends VerticalLayout {
+
+    @Autowired
+    private WorkoutService workoutService;
 
     private TextField workoutName = new TextField("Workout name");
     private TextField workoutDate = new TextField("Workout date [YYYY-MM-DD]");
@@ -22,13 +26,12 @@ public class SetWorkoutView extends VerticalLayout {
     private Button back = new Button("Back");
     private Button submit = new Button("Submit");
     private ExerciseWithParametersService exerciseWithParametersService = ExerciseWithParametersService.getInstance();
-    private WorkoutService workoutService = WorkoutService.getInstance();
 
     public SetWorkoutView() {
 
         HorizontalLayout dataLayout = new HorizontalLayout(workoutName, workoutDate);
         back.addClickListener(event -> goBack());
-        submit.addClickListener(event -> submitWorkout());
+        // submit.addClickListener(event -> submitWorkout());
         HorizontalLayout buttonLayout = new HorizontalLayout(back, submit);
         add(title, dataLayout, buttonLayout);
         setAlignItems(Alignment.CENTER);
@@ -38,7 +41,7 @@ public class SetWorkoutView extends VerticalLayout {
         getUI().ifPresent(ui -> ui.navigate(NewWorkoutView.class, "parameter"));
     }
 
-    private void submitWorkout() {
+    /*private void submitWorkout() {
         if (workoutName.getValue() != null && workoutDate.getValue() != null) {
             if (workoutService.getWorkoutList().stream().filter(workout -> workout.getWorkoutName().equals(workoutName.getEmptyValue())).count() == 0) {
             try {
@@ -55,6 +58,6 @@ public class SetWorkoutView extends VerticalLayout {
             }
         } else {
             Notification.show("No field can be empty!");
-        }
-    }
+        }*/
 }
+

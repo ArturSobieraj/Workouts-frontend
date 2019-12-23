@@ -1,21 +1,19 @@
 package com.workouts.workoutsfrontend.dataServices;
 
-
-import com.workouts.workoutsfrontend.dataServices.Dto.Workout;
-
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
+import com.workouts.workoutsfrontend.Dto.Workout;
+import com.workouts.workoutsfrontend.facades.WorkoutsFacade;
 import java.util.ArrayList;
 import java.util.List;
 
 public class WorkoutService {
 
+    private WorkoutsFacade workoutsFacade = new WorkoutsFacade();
     private List<Workout> workoutList;
     private static WorkoutService workoutService;
-    private ExerciseWithParametersService exerciseWithParametersService = ExerciseWithParametersService.getInstance();
+    private String userMail;
 
     private WorkoutService() {
-        this.workoutList = exampleData();
+        workoutList = new ArrayList<>();
     }
 
     public static WorkoutService getInstance() {
@@ -25,8 +23,12 @@ public class WorkoutService {
         return workoutService;
     }
 
-    public List<Workout> getWorkoutList() {
-        return new ArrayList<>(workoutList);
+    public List<Workout> getWorkoutList(String userMail) {
+        if (workoutList.size() == 0) {
+            getWorkouts(userMail);
+            return new ArrayList<>(workoutList);
+        } else
+            return new ArrayList<>(workoutList);
     }
 
     public void addWorkout(Workout workout) {
@@ -34,13 +36,18 @@ public class WorkoutService {
     }
 
     public void deleteWorkout(Workout workout) {
-        workoutList.remove(workout);
+        workoutsFacade.deleteWorkout(workout.getWorkoutName());
     }
 
-    private List<Workout> exampleData() {
-        workoutList = new ArrayList<>();
-        workoutList.add(new Workout("Example Workout", exerciseWithParametersService.getExerciseWithParametersList(), LocalDate.now().plus(2, ChronoUnit.DAYS)));
-        workoutList.add(new Workout("Example workout nr 2", exerciseWithParametersService.getExerciseWithParametersList(), LocalDate.now().plus(5, ChronoUnit.DAYS)));
-        return workoutList;
+    private void getWorkouts(String userMail) {
+        workoutList = workoutsFacade.getUsersWorkouts(userMail);
+    }
+
+    public String getUserMail() {
+        return userMail;
+    }
+
+    public void setUserMail(String mail) {
+        userMail = mail;
     }
 }

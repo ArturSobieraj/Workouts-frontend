@@ -8,18 +8,18 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
-import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.router.Route;
-import com.workouts.workoutsfrontend.dataServices.Dto.User;
 import com.workouts.workoutsfrontend.dataServices.UserService;
+import com.workouts.workoutsfrontend.views.dashboardView.DashboardMainView;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Route("")
 public class LoginMainView extends VerticalLayout {
 
     private UserService userService = UserService.getInstance();
-    private Binder<User> binder = new Binder<>(User.class);
+
     private TextField email = new TextField("Email");
-    private PasswordField password = new PasswordField("Password");
+    private PasswordField password = new PasswordField("Hasło");
 
     public LoginMainView() {
 
@@ -32,15 +32,13 @@ public class LoginMainView extends VerticalLayout {
         vl2.add(email);
         vl2.add(password);
         vl2.setAlignItems(Alignment.CENTER);
-        binder.bindInstanceFields(this);
-        binder.setBean(new User());
 
         HorizontalLayout horizontalLayout = new HorizontalLayout();
-        Button login = new Button("Login");
-        login.setWidth("50%");
+        Button login = new Button("Logowanie");
+        login.setSizeUndefined();
         login.addClickListener(event -> logingEvent(login));
-        Button register = new Button("Register");
-        register.setSizeFull();
+        Button register = new Button("Rejestracja");
+        register.setSizeUndefined();
         register.addClickListener(event -> registerEvent(register));
         horizontalLayout.add(register);
         horizontalLayout.add(login);
@@ -54,14 +52,15 @@ public class LoginMainView extends VerticalLayout {
     }
 
     private void logingEvent(Button login) {
-        if (!userService.getEnteringUser(binder.getBean().getEmail()).isEmpty()) {
-            if (userService.getEnteringUser(binder.getBean().getEmail()).get(0).getPassword().equals(binder.getBean().getPassword())) {
-                login.getUI().ifPresent(ui -> ui.navigate("dashboard"));
+
+        if (userService.getEnteringUser(email.getValue()) != null) {
+            if (userService.getEnteringUser(email.getValue()).getPassword().equals(password.getValue())) {
+                login.getUI().ifPresent(ui -> ui.navigate(DashboardMainView.class, email.getValue()));
             } else {
-                Notification.show("Wrong password");
+                Notification.show("Błędne hasło", 2000, Notification.Position.MIDDLE);
             }
         } else {
-            Notification.show("User not found");
+            Notification.show("Nie znaleziono użytkownika", 2000, Notification.Position.MIDDLE);
         }
     }
 

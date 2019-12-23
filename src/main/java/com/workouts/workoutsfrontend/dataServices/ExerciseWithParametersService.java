@@ -1,6 +1,6 @@
 package com.workouts.workoutsfrontend.dataServices;
 
-import com.workouts.workoutsfrontend.dataServices.Dto.ExerciseWithParameters;
+import com.workouts.workoutsfrontend.Dto.ExerciseWithParameters;
 
 import java.util.ArrayList;
 import java.util.List;

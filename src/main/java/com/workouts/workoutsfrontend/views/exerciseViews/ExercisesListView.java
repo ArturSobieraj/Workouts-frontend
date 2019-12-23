@@ -5,8 +5,9 @@ import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
-import com.workouts.workoutsfrontend.dataServices.Dto.Exercise;
+import com.workouts.workoutsfrontend.Dto.Exercise;
 import com.workouts.workoutsfrontend.dataServices.ExerciseService;
+import com.workouts.workoutsfrontend.views.dashboardView.DashboardMainView;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -97,6 +98,6 @@ public class ExercisesListView extends VerticalLayout {
     }
 
     private void goBackAction(Button backButton) {
-        backButton.getUI().ifPresent(ui -> ui.navigate("dashboard"));
+        backButton.getUI().ifPresent(ui -> ui.navigate(DashboardMainView.class, "zero parameter"));
     }
 }

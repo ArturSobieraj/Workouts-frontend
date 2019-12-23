@@ -1,6 +1,9 @@
 package com.workouts.workoutsfrontend.dataServices;
 
-import com.workouts.workoutsfrontend.dataServices.Dto.User;
+import com.workouts.workoutsfrontend.Dto.User;
+import com.workouts.workoutsfrontend.facades.UsersFacade;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,11 +11,11 @@ import java.util.stream.Collectors;
 
 public class UserService {
 
-    private List<User> user;
+    private UsersFacade usersFacade = new UsersFacade();
     private static UserService userService;
 
     private UserService() {
-        this.user = exampleUser();
+
     }
 
     public static UserService getInstance() {
@@ -22,21 +25,15 @@ public class UserService {
         return userService;
     }
 
-    public List<User> getUser() {
-        return new ArrayList<>(user);
-    }
-
     public void addUser(User user) {
-        this.user.add(user);
+        usersFacade.saveUser(user);
     }
 
-    public List<User> getEnteringUser(String email) {
-        return user.stream().filter(u -> u.getEmail().equals(email)).collect(Collectors.toList());
+    public User getEnteringUser(String email) {
+        return usersFacade.getUser(email);
     }
 
-    private List<User> exampleUser() {
-        List<User> user = new ArrayList<>();
-        user.add(new User("example", "example"));
-        return user;
+    public List<User> getUsers() {
+        return usersFacade.getUsers();
     }
 }

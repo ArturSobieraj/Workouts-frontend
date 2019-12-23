@@ -1,7 +1,6 @@
 package com.workouts.workoutsfrontend.views.WorkoutView;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.notification.Notification;
@@ -11,26 +10,23 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.BeforeEvent;
 import com.vaadin.flow.router.HasUrlParameter;
 import com.vaadin.flow.router.Route;
-import com.workouts.workoutsfrontend.dataServices.Dto.Exercise;
-import com.workouts.workoutsfrontend.dataServices.Dto.ExerciseWithParameters;
-import com.workouts.workoutsfrontend.dataServices.Dto.Workout;
+import com.workouts.workoutsfrontend.Dto.Exercise;
+import com.workouts.workoutsfrontend.Dto.ExerciseWithParameters;
+import com.workouts.workoutsfrontend.Dto.Workout;
 import com.workouts.workoutsfrontend.dataServices.ExerciseService;
 import com.workouts.workoutsfrontend.dataServices.ExerciseWithParametersService;
 import com.workouts.workoutsfrontend.dataServices.WorkoutService;
 import com.workouts.workoutsfrontend.views.exerciseViews.FavouriteExercises;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 @Route("workout")
 public class NewWorkoutView extends VerticalLayout implements HasUrlParameter<String> {
 
+    private WorkoutService workoutService = WorkoutService.getInstance();
     private final String LABEL_DESC = "Exercise name: ";
     private ExerciseWithParametersService exerciseWithParametersService = ExerciseWithParametersService.getInstance();
     private ExerciseService exerciseService = ExerciseService.getInstance();
-    private WorkoutService workoutService = WorkoutService.getInstance();
     private Grid<ExerciseWithParameters> exerciseWithParametersGrid = new Grid<>();
     private String exerciseName = "";
     private Label newWorkout = new Label("Create new Workout");
@@ -127,8 +123,8 @@ public class NewWorkoutView extends VerticalLayout implements HasUrlParameter<St
     @Override
     public void setParameter(BeforeEvent event, String parameter) {
         if (!parameter.equals("parameter")) {
-            if (workoutService.getWorkoutList().stream().filter(workout -> workout.getWorkoutName().equals(parameter)).count() != 0) {
-                for (Workout workout : workoutService.getWorkoutList()) {
+            if (workoutService.getWorkoutList(workoutService.getUserMail()).stream().filter(workout -> workout.getWorkoutName().equals(parameter)).count() != 0) {
+                for (Workout workout : workoutService.getWorkoutList(workoutService.getUserMail())) {
                     if (workout.getWorkoutName().equals(parameter)) {
                         exerciseWithParametersGrid.setItems(workout.getExercisesWithSeriesRepetitionsBreaks());
                         exerciseWithParametersService.setExercisesForNewWorkout(workout.getExercisesWithSeriesRepetitionsBreaks());
