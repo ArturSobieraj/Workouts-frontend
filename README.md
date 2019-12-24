@@ -6,11 +6,10 @@ Aplikacja pozwala na tworzenie i personalizację treningów na siłowni, z dost�
 ## Uruchomienie:
 - Po uruchomieniu backendu aplikacja jest od razu gotowa do użycia
 
-## Znane problemy:
-W chwili wysłania commita zabrakło niestety czasu na: 
+## Dalszy rozwój: 
 - Pokrycie kodu testami
-- Implementację funkcjonalności dodania i edycji treningu
-- Implementację edycji konta użytkownika
-- Implementację możliwości dodania własnego treningu
-- Naprawę kilku drobnych błędów w logice
+- Implementacja funkcjonalności dodania i edycji treningu
+- Implementacja edycji konta użytkownika
+- Implementacja możliwości dodania własnego treningu
+- Naprawa kilku drobnych błędów w logice
 - Refactor kodu
