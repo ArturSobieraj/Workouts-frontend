@@ -24,13 +24,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class NewWorkoutView extends VerticalLayout implements HasUrlParameter<String> {
 
     private WorkoutService workoutService = WorkoutService.getInstance();
-    private final String LABEL_DESC = "Exercise name: ";
     private ExerciseWithParametersService exerciseWithParametersService = ExerciseWithParametersService.getInstance();
     private ExerciseService exerciseService = ExerciseService.getInstance();
     private Grid<ExerciseWithParameters> exerciseWithParametersGrid = new Grid<>();
-    private String exerciseName = "";
+    private Label exerciseName = new Label();
     private Label newWorkout = new Label("Create new Workout");
-    private Label name = new Label(LABEL_DESC);
+    private Label nameLabel = new Label("Exercise name: ");
     private TextField series = new TextField("Series: ");
     private TextField repetitions = new TextField("Number of repetitions: ");
     private TextField pauses = new TextField("Pause time [s]: ");
@@ -40,8 +39,10 @@ public class NewWorkoutView extends VerticalLayout implements HasUrlParameter<St
     private Button exercisesList = new Button("Exercises list");
     private Button editExercise = new Button("Edit");
     private Button deleteExercise = new Button("Delete exercise");
+    private ExerciseWithParameters editingExercise = new ExerciseWithParameters();
+    private boolean isEdited;
 
-    public NewWorkoutView() {
+    public NewWorkoutView() { //problem z dodawaniem do treningu pustej listy ćwiczeń
 
         goToFavourites.addClickListener(event -> goToFavourites());
         exercisesList.addClickListener(event -> goToExercisesList());
@@ -58,12 +59,14 @@ public class NewWorkoutView extends VerticalLayout implements HasUrlParameter<St
         exerciseWithParametersGrid.addColumn(ExerciseWithParameters::getPauseTime).setHeader("Pause time");
         exerciseWithParametersGrid.setSizeUndefined();
 
+        HorizontalLayout exerciseNameLayout = new HorizontalLayout();
+        exerciseNameLayout.add(nameLabel, exerciseName);
+        exerciseNameLayout.setAlignItems(Alignment.CENTER);
         HorizontalLayout buttonsLayout = new HorizontalLayout(goToFavourites, exercisesList, deleteExercise, editExercise);
         buttonsLayout.setAlignItems(Alignment.CENTER);
 
-        add(newWorkout, name, parametersLayout, addExercise, exerciseWithParametersGrid, buttonsLayout, submit);
+        add(newWorkout, exerciseNameLayout, parametersLayout, addExercise, exerciseWithParametersGrid, buttonsLayout, submit);
         setAlignItems(Alignment.CENTER);
-        refresh();
     }
 
     private void goToExercisesList() {
@@ -76,27 +79,31 @@ public class NewWorkoutView extends VerticalLayout implements HasUrlParameter<St
 
     private void deleteExercise() {
         if (exerciseWithParametersGrid.asSingleSelect().getValue() != null) {
-            exerciseWithParametersService.deleteAddedExercise(exerciseWithParametersGrid.asSingleSelect().getValue());
+            exerciseWithParametersService.deleteAddedExercise(exerciseWithParametersGrid.asSingleSelect().getValue().getId());
         } else {
-            Notification.show("Nothing selected", 1000, Notification.Position.MIDDLE);
+            Notification.show("Nothing selected", 2000, Notification.Position.MIDDLE);
         }
         refresh();
     }
 
     private void refresh() {
-        exerciseWithParametersGrid.setItems(exerciseWithParametersService.getExercisesForNewWorkout());
+        if(workoutService.getWorkoutId() == null) {
+            exerciseWithParametersGrid.setItems(exerciseWithParametersService.getUsersExercises(workoutService.getUserMail()));
+        } else {
+            exerciseWithParametersGrid.setItems(exerciseWithParametersService.getWorkoutExercises(workoutService.getWorkoutId()));
+        }
     }
 
     private void editExercise() {
         if (exerciseWithParametersGrid.asSingleSelect().getValue() != null) {
-            ExerciseWithParameters editedExerciseWithParameters = exerciseWithParametersGrid.asSingleSelect().getValue();
-            exerciseName = editedExerciseWithParameters.getExerciseName();
-            series.setValue(editedExerciseWithParameters.getNumberOfSeries());
-            repetitions.setValue(editedExerciseWithParameters.getNumberOfRepetitions());
-            pauses.setValue(editedExerciseWithParameters.getPauseTime());
-            exerciseWithParametersService.deleteAddedExercise(editedExerciseWithParameters);
+            editingExercise = exerciseWithParametersGrid.asSingleSelect().getValue();
+            nameLabel.setText(editingExercise.getExerciseName());
+            series.setValue(editingExercise.getNumberOfSeries());
+            repetitions.setValue(editingExercise.getNumberOfRepetitions());
+            pauses.setValue(editingExercise.getPauseTime());
+            isEdited = true;
         } else {
-            Notification.show("Nothing selected", 1000, Notification.Position.MIDDLE);
+            Notification.show("Nothing selected", 2000, Notification.Position.MIDDLE);
         }
     }
 
@@ -105,39 +112,44 @@ public class NewWorkoutView extends VerticalLayout implements HasUrlParameter<St
     }
 
     private void addExercise() {
-        if (exerciseService.getExerciseByName(exerciseName) != null && series.getValue() != null && repetitions.getValue() != null && pauses.getValue() != null) {
-            exerciseWithParametersService.addNewExercise(new ExerciseWithParameters(exerciseService.getExerciseByName(exerciseName),
-                    series.getValue(),
-                    repetitions.getValue(),
-                    pauses.getValue()));
+        if (exerciseService.getExerciseByName(exerciseName.getText()) != null && !series.isEmpty() && !repetitions.isEmpty() && !pauses.isEmpty()) {
+            if (!isEdited) {
+                ExerciseWithParameters newExercise = new ExerciseWithParameters();
+                newExercise.setExercises(exerciseService.getExerciseByName(exerciseName.getText()));
+                newExercise.setNumberOfSeries(series.getValue());
+                newExercise.setNumberOfRepetitions(repetitions.getValue());
+                newExercise.setPauseTime(pauses.getValue());
+                newExercise.setUserName(workoutService.getUserMail());
+                exerciseWithParametersService.addNewExercise(newExercise);
+            } else {
+                editingExercise.setNumberOfSeries(series.getValue());
+                editingExercise.setNumberOfRepetitions(repetitions.getValue());
+                editingExercise.setPauseTime(pauses.getValue());
+                if (workoutService.getWorkoutId() != null) {
+                    editingExercise.setWorkout(workoutService.getWorkout(workoutService.getWorkoutId()));
+                }
+                exerciseWithParametersService.updateExercise(editingExercise);
+            }
         } else {
-            Notification.show("Form fields cannot be null!", 1000, Notification.Position.MIDDLE);
+            Notification.show("Form fields cannot be null!", 2000, Notification.Position.MIDDLE);
         }
         series.clear();
         repetitions.clear();
         pauses.clear();
-        name.setText(LABEL_DESC);
+        exerciseName.setText("");
+        isEdited = false;
         refresh();
     }
 
     @Override
     public void setParameter(BeforeEvent event, String parameter) {
         if (!parameter.equals("parameter")) {
-            if (workoutService.getWorkoutList(workoutService.getUserMail()).stream().filter(workout -> workout.getWorkoutName().equals(parameter)).count() != 0) {
-                for (Workout workout : workoutService.getWorkoutList(workoutService.getUserMail())) {
-                    if (workout.getWorkoutName().equals(parameter)) {
-                        exerciseWithParametersGrid.setItems(workout.getExercisesWithSeriesRepetitionsBreaks());
-                        exerciseWithParametersService.setExercisesForNewWorkout(workout.getExercisesWithSeriesRepetitionsBreaks());
-                        workoutService.deleteWorkout(workout);
-                        refresh();
-                    }
-                }
-            } else {
-                Exercise exercise = exerciseService.getExerciseByName(parameter);
-                exerciseName = exercise.getExerciseName();
-                name.setText(LABEL_DESC + exercise.getExerciseName());
-                refresh();
+            if (exerciseService.getExerciseByName(parameter).getId() != null) {
+                exerciseName.setText(parameter);
+            } else  {
+                Notification.show("Wystąpił błąd", 2000, Notification.Position.MIDDLE);
             }
         }
+        refresh();
     }
 }

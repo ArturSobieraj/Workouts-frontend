@@ -1,5 +1,6 @@
 package com.workouts.workoutsfrontend.clients;
 
+import com.vaadin.flow.component.notification.Notification;
 import com.workouts.workoutsfrontend.Dto.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestClientException;
@@ -24,6 +25,7 @@ public class UserClient {
             User[] usersResponse = restTemplate.getForObject(getUsersURL, User[].class);
             return Arrays.asList(ofNullable(usersResponse).orElse(new User[0]));
         } catch (RestClientException e) {
+            Notification.show("Error", 2000, Notification.Position.MIDDLE);
             return new ArrayList<>();
         }
     }
@@ -35,13 +37,16 @@ public class UserClient {
         try {
             return restTemplate.getForObject(getUserURL, User.class);
         } catch (RestClientException e) {
-            return null;
+            Notification.show("Error", 2000, Notification.Position.MIDDLE);
+            return new User();
         }
     }
 
-    public User saveUser(User user) {
-        URI saveUserURL = UriComponentsBuilder.fromHttpUrl("http://localhost:8081/v1/users/add").build().encode().toUri();
+    public void saveUser(String userName, String password) {
+        URI saveUserURL = UriComponentsBuilder.fromHttpUrl("http://localhost:8081/v1/users/add")
+                .queryParam("userName", userName)
+                .queryParam("password", password).build().encode().toUri();
 
-        return restTemplate.postForObject(saveUserURL, user, User.class);
+        restTemplate.postForObject(saveUserURL, null, User.class);
     }
 }

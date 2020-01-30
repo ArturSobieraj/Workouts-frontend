@@ -43,13 +43,15 @@ public class RegisterView extends VerticalLayout {
         if (newUserPassword.getValue().equals(confirmPassword.getValue())) {
             if (userService.getUsers().stream().filter(user -> user.getMail().equals(newUserEmail.getValue())).count() != 0) {
                 Notification.show("Użytkownik już istnieje!", 2000, Notification.Position.MIDDLE);
-            } else {
-                userService.addUser(new User(newUserEmail.getValue(), newUserPassword.getValue()));
+            } else if (!newUserEmail.getValue().isEmpty()){
+                userService.addUser(newUserEmail.getValue(), newUserPassword.getValue());
                 Notification.show("Konto utworzone", 2000, Notification.Position.MIDDLE);
                 register.getUI().ifPresent(ui -> ui.navigate(""));
+            } else {
+                Notification.show("Pole loginu nie może być puste!", 3000, Notification.Position.MIDDLE);
             }
         } else {
-            Notification.show("Błędne potwierdzenie hasła", 2000, Notification.Position.MIDDLE);
+            Notification.show("Błędy w potwierdzenie hasła", 2000, Notification.Position.MIDDLE);
         }
     }
 

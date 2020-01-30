@@ -9,9 +9,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
+import com.workouts.workoutsfrontend.Dto.User;
 import com.workouts.workoutsfrontend.dataServices.UserService;
 import com.workouts.workoutsfrontend.views.dashboardView.DashboardMainView;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Route("")
 public class LoginMainView extends VerticalLayout {
@@ -52,15 +52,18 @@ public class LoginMainView extends VerticalLayout {
     }
 
     private void logingEvent(Button login) {
-
-        if (userService.getEnteringUser(email.getValue()) != null) {
-            if (userService.getEnteringUser(email.getValue()).getPassword().equals(password.getValue())) {
-                login.getUI().ifPresent(ui -> ui.navigate(DashboardMainView.class, email.getValue()));
+        if (!email.getValue().isEmpty() && !password.getValue().isEmpty()) {
+            if (userService.getEnteringUser(email.getValue()).getMail() != null) {
+                if (userService.getEnteringUser(email.getValue()).getPassword().equals(password.getValue())) {
+                    login.getUI().ifPresent(ui -> ui.navigate(DashboardMainView.class, email.getValue()));
+                } else {
+                    Notification.show("Błędne hasło", 2000, Notification.Position.MIDDLE);
+                }
             } else {
-                Notification.show("Błędne hasło", 2000, Notification.Position.MIDDLE);
+                Notification.show("Nie znaleziono użytkownika", 2000, Notification.Position.MIDDLE);
             }
         } else {
-            Notification.show("Nie znaleziono użytkownika", 2000, Notification.Position.MIDDLE);
+            Notification.show("Fields cannot be empty", 3000, Notification.Position.MIDDLE);
         }
     }
 

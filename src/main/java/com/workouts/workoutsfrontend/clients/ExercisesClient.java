@@ -1,6 +1,7 @@
 package com.workouts.workoutsfrontend.clients;
 
 import com.workouts.workoutsfrontend.Dto.Exercise;
+import com.workouts.workoutsfrontend.Dto.ExerciseWithParameters;
 import com.workouts.workoutsfrontend.Dto.FavouriteExercise;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -52,12 +53,12 @@ public class ExercisesClient {
         }
     }
 
-    public FavouriteExercise saveNewFavouriteExercise(String userMail, Long exerciseId) {
+    public void saveNewFavouriteExercise(String userMail, Long exerciseId) {
         URI saveFavouriteExerciseURL = UriComponentsBuilder.fromHttpUrl("http://localhost:8081/v1/favExercises/add")
                 .queryParam("userMail", userMail)
                 .queryParam("exerciseId", exerciseId).build().encode().toUri();
 
-        return restTemplate.postForObject(saveFavouriteExerciseURL, null, FavouriteExercise.class);
+        restTemplate.postForObject(saveFavouriteExerciseURL, null, FavouriteExercise.class);
     }
 
     public void deleteFavouriteExercise(Long id) {
@@ -65,5 +66,48 @@ public class ExercisesClient {
                 .queryParam("id", id).build().encode().toUri();
 
         restTemplate.delete(deleteFavouriteExerciseURL);
+    }
+
+    public List<ExerciseWithParameters> getUsersExercises(String userName) {
+        URI getAllForNewWorkout = UriComponentsBuilder.fromHttpUrl("http://localhost:8081/v1/exwithparams/getallbyuser")
+                .queryParam("userName", userName).build().encode().toUri();
+
+        try {
+            ExerciseWithParameters[] exerciseWithParametersResponse = restTemplate.getForObject(getAllForNewWorkout, ExerciseWithParameters[].class);
+            return Arrays.asList(ofNullable(exerciseWithParametersResponse).orElse(new ExerciseWithParameters[0]));
+        } catch (RestClientException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public List<ExerciseWithParameters> getExercisesByWorkout(Long workoutId) {
+        URI getAllByWorkout = UriComponentsBuilder.fromHttpUrl("http://localhost:8081/v1/exwithparams/getallbyworkout")
+                .queryParam("workoutId", workoutId).build().encode().toUri();
+
+        try {
+            ExerciseWithParameters[] exerciseWithParametersResponse = restTemplate.getForObject(getAllByWorkout, ExerciseWithParameters[].class);
+            return Arrays.asList(ofNullable(exerciseWithParametersResponse).orElse(new ExerciseWithParameters[0]));
+        } catch (RestClientException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public void updateExercise(ExerciseWithParameters exerciseWithParameters) {
+        URI updateExerciseURL = UriComponentsBuilder.fromHttpUrl("http://localhost:8081/v1/exwithparams/edit") .build().encode().toUri();
+
+        restTemplate.put(updateExerciseURL, exerciseWithParameters);
+    }
+
+    public void addNewExercise(ExerciseWithParameters exerciseWithParameters) {
+        URI addNewExerciseURL = UriComponentsBuilder.fromHttpUrl("http://localhost:8081/v1/exwithparams/add").build().encode().toUri();
+
+        restTemplate.postForObject(addNewExerciseURL, exerciseWithParameters, ExerciseWithParameters.class);
+    }
+
+    public void deleteExercise(Long exerciseId) {
+        URI deleteExerciseURL = UriComponentsBuilder.fromHttpUrl("http://localhost:8081/v1/exwithparams/delete")
+                .queryParam("exerciseId", exerciseId).build().encode().toUri();
+
+        restTemplate.delete(deleteExerciseURL);
     }
 }

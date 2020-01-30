@@ -25,8 +25,8 @@ public class UserService {
         return userService;
     }
 
-    public void addUser(User user) {
-        usersFacade.saveUser(user);
+    public void addUser(String userName, String password) {
+        usersFacade.saveUser(userName, password);
     }
 
     public User getEnteringUser(String email) {

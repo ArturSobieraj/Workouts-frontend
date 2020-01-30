@@ -19,7 +19,7 @@ public class UsersFacade {
         return userClient.getUser(userMail);
     }
 
-    public void saveUser(User user) {
-        userClient.saveUser(user);
+    public void saveUser(String userName, String password) {
+        userClient.saveUser(userName, password);
     }
 }

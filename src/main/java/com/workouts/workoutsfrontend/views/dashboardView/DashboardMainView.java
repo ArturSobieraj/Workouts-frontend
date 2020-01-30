@@ -103,7 +103,8 @@ public class DashboardMainView extends VerticalLayout implements HasUrlParameter
 
     private void editWorkout() {
         if (workoutGrid.asSingleSelect().getValue() != null) {
-            getUI().ifPresent(ui -> ui.navigate(NewWorkoutView.class, workoutGrid.asSingleSelect().getValue().getWorkoutName()));
+            workoutService.setWorkoutId(workoutGrid.asSingleSelect().getValue().getId());
+            getUI().ifPresent(ui -> ui.navigate(NewWorkoutView.class, "parameter"));
         } else {
             Notification.show("Nic nie zaznaczono", 3000, Notification.Position.MIDDLE);
         }

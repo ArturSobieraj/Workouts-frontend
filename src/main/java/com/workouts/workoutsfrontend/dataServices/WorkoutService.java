@@ -2,18 +2,18 @@ package com.workouts.workoutsfrontend.dataServices;
 
 import com.workouts.workoutsfrontend.Dto.Workout;
 import com.workouts.workoutsfrontend.facades.WorkoutsFacade;
-import java.util.ArrayList;
+
+import java.time.LocalDate;
 import java.util.List;
 
 public class WorkoutService {
 
     private WorkoutsFacade workoutsFacade = new WorkoutsFacade();
-    private List<Workout> workoutList;
     private static WorkoutService workoutService;
     private String userMail;
+    private Long workoutId;
 
     private WorkoutService() {
-        workoutList = new ArrayList<>();
     }
 
     public static WorkoutService getInstance() {
@@ -23,24 +23,24 @@ public class WorkoutService {
         return workoutService;
     }
 
-    public List<Workout> getWorkoutList(String userMail) {
-        if (workoutList.size() == 0) {
-            getWorkouts(userMail);
-            return new ArrayList<>(workoutList);
-        } else
-            return new ArrayList<>(workoutList);
+    public Workout getWorkout(Long workoutId) {
+        return workoutsFacade.getWorkoutById(workoutId);
     }
 
-    public void addWorkout(Workout workout) {
-        workoutList.add(workout);
+    public List<Workout> getWorkoutList(String userMail) {
+        return workoutsFacade.getUsersWorkouts(userMail);
+    }
+
+    public void addWorkout(String workoutName, LocalDate trainingDate) {
+        workoutsFacade.saveWorkout(workoutName, trainingDate, userMail);
+    }
+
+    public void updateWorkout(Workout workout) {
+
     }
 
     public void deleteWorkout(Workout workout) {
         workoutsFacade.deleteWorkout(workout.getWorkoutName());
-    }
-
-    private void getWorkouts(String userMail) {
-        workoutList = workoutsFacade.getUsersWorkouts(userMail);
     }
 
     public String getUserMail() {
@@ -48,6 +48,14 @@ public class WorkoutService {
     }
 
     public void setUserMail(String mail) {
-        userMail = mail;
+        this.userMail = mail;
+    }
+
+    public Long getWorkoutId() {
+        return workoutId;
+    }
+
+    public void setWorkoutId(Long workoutId) {
+        this.workoutId = workoutId;
     }
 }

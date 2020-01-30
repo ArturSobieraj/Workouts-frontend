@@ -1,20 +1,19 @@
 package com.workouts.workoutsfrontend.dataServices;
 
 import com.workouts.workoutsfrontend.Dto.ExerciseWithParameters;
+import com.workouts.workoutsfrontend.facades.ExercisesWithParametersFacade;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ExerciseWithParametersService {
 
-    private List<ExerciseWithParameters> exerciseWithParametersList;
-    private List<ExerciseWithParameters> exercisesForNewWorkout;
     private static ExerciseWithParametersService exerciseWithParametersService;
     private ExerciseService exerciseService = ExerciseService.getInstance();
+    private ExercisesWithParametersFacade exercisesWithParametersFacade = new ExercisesWithParametersFacade();
 
     private ExerciseWithParametersService() {
-        this.exerciseWithParametersList = exampleData();
-        this.exercisesForNewWorkout = new ArrayList<>();
+
     }
 
     public static ExerciseWithParametersService getInstance() {
@@ -25,35 +24,22 @@ public class ExerciseWithParametersService {
     }
 
     public void addNewExercise(ExerciseWithParameters exerciseWithParameters) {
-        this.exercisesForNewWorkout.add(exerciseWithParameters);
+        exercisesWithParametersFacade.addNewExercise(exerciseWithParameters);
     }
 
-    public void deleteAddedExercise(ExerciseWithParameters exerciseWithParameters) {
-        this.exercisesForNewWorkout.remove(exerciseWithParameters);
+    public void updateExercise(ExerciseWithParameters exerciseWithParameters) {
+        exercisesWithParametersFacade.updateExercise(exerciseWithParameters);
     }
 
-    public List<ExerciseWithParameters> getExercisesForNewWorkout() {
-        return new ArrayList<>(exercisesForNewWorkout);
+    public void deleteAddedExercise(Long exerciseId) {
+        exercisesWithParametersFacade.deleteExercise(exerciseId);
     }
 
-    public List<ExerciseWithParameters> getExerciseWithParametersList() {
-        return new ArrayList<>(exerciseWithParametersList);
+    public List<ExerciseWithParameters> getUsersExercises(String userName) {
+        return exercisesWithParametersFacade.getUsersExercises(userName);
     }
 
-    public void setClearList() {
-        this.exercisesForNewWorkout = new ArrayList<>();
-    }
-
-    public void setExercisesForNewWorkout(List<ExerciseWithParameters> list) {
-        this.exercisesForNewWorkout = list;
-    }
-
-    private List<ExerciseWithParameters> exampleData() {
-        exerciseWithParametersList = new ArrayList<>();
-        exerciseWithParametersList.add(new ExerciseWithParameters(exerciseService.getExerciseList().get(0), "4", "10", "60"));
-        exerciseWithParametersList.add(new ExerciseWithParameters(exerciseService.getExerciseList().get(1), "4", "10", "60"));
-        exerciseWithParametersList.add(new ExerciseWithParameters(exerciseService.getExerciseList().get(2), "4", "10", "60"));
-
-        return exerciseWithParametersList;
+    public List<ExerciseWithParameters> getWorkoutExercises(Long workoutId) {
+        return exercisesWithParametersFacade.getExercisesByWorkout(workoutId);
     }
 }

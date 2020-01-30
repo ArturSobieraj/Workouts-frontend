@@ -6,12 +6,14 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.workouts.workoutsfrontend.Dto.ExerciseWithParameters;
 import com.workouts.workoutsfrontend.Dto.Workout;
+import com.workouts.workoutsfrontend.dataServices.ExerciseWithParametersService;
 
 import java.util.List;
 
 public class WorkoutDetails extends VerticalLayout {
 
     private Grid<ExerciseWithParameters> exerciseWithParametersGrid = new Grid<>();
+    private ExerciseWithParametersService exerciseWithParametersService = ExerciseWithParametersService.getInstance();
 
     public WorkoutDetails(){
         HorizontalLayout buttonsLayout = new HorizontalLayout();
@@ -29,7 +31,7 @@ public class WorkoutDetails extends VerticalLayout {
     }
 
     public void fillGrid(Workout workout){
-        List<ExerciseWithParameters> exerciseWithParameters = workout.getExercisesWithSeriesRepetitionsBreaks();
+        List<ExerciseWithParameters> exerciseWithParameters = exerciseWithParametersService.getWorkoutExercises(workout.getId());
         exerciseWithParametersGrid.setItems(exerciseWithParameters);
     }
 
