@@ -80,7 +80,7 @@ public class ExercisesClient {
         }
     }
 
-    public List<ExerciseWithParameters> getExercisesByWorkout(Long workoutId) {
+    public List<ExerciseWithParameters> getExercisesByWorkout(Long workoutId) { //utworzyć metodę w backendzie
         URI getAllByWorkout = UriComponentsBuilder.fromHttpUrl("http://localhost:8081/v1/exwithparams/getallbyworkout")
                 .queryParam("workoutId", workoutId).build().encode().toUri();
 

@@ -17,22 +17,20 @@ public class WorkoutDetails extends VerticalLayout {
 
     public WorkoutDetails(){
         HorizontalLayout buttonsLayout = new HorizontalLayout();
-        Button editButton = new Button("Edit");
         Button closeButton = new Button("Close");
         exerciseWithParametersGrid.addColumn(ExerciseWithParameters::getExerciseName).setHeader("Exercise").setWidth("40%").setResizable(true);
         exerciseWithParametersGrid.addColumn(ExerciseWithParameters::getNumberOfSeries).setHeader("Series");
         exerciseWithParametersGrid.addColumn(ExerciseWithParameters::getNumberOfRepetitions).setHeader("Repetitions");
         exerciseWithParametersGrid.addColumn(ExerciseWithParameters::getPauseTime).setHeader("Pause time");
         closeButton.addClickListener(event -> setDetailedWorkoutGridVisibility(null));
-        buttonsLayout.add(editButton, closeButton);
+        buttonsLayout.add(closeButton);
         add(exerciseWithParametersGrid, buttonsLayout);
-        //setSizeFull();
-        //setVisible(true);
+        setSizeFull();
+        setVisible(true);
     }
 
     public void fillGrid(Workout workout){
-        List<ExerciseWithParameters> exerciseWithParameters = exerciseWithParametersService.getWorkoutExercises(workout.getId());
-        exerciseWithParametersGrid.setItems(exerciseWithParameters);
+        exerciseWithParametersGrid.setItems(workout.getExercisesWithSeriesRepetitionsBreaks());
     }
 
     public void setDetailedWorkoutGridVisibility(Workout workout) {

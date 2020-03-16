@@ -111,7 +111,7 @@ public class NewWorkoutView extends VerticalLayout implements HasUrlParameter<St
         getUI().ifPresent(ui -> ui.navigate("submit"));
     }
 
-    private void addExercise() {
+    private void addExercise() { //zjebane, przerobić metodę
         if (exerciseService.getExerciseByName(exerciseName.getText()) != null && !series.isEmpty() && !repetitions.isEmpty() && !pauses.isEmpty()) {
             if (!isEdited) {
                 ExerciseWithParameters newExercise = new ExerciseWithParameters();

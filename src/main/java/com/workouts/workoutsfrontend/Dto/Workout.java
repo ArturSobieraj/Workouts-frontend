@@ -28,4 +28,7 @@ public class Workout {
 
     @JsonProperty("trainingDate")
     private LocalDate trainingDate;
+
+    @JsonProperty("exercisingUser")
+    private String exercisingUser;
 }
